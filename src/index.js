@@ -30,6 +30,15 @@ io.on('connection', function (client) {
             client.emit('config', config);
         }
     });
+
+    client.on('changeTapp', ({ uid, tappId }) => {
+        const config = getConfig(uid);
+
+        if (config) {
+            config.tappId = tappId;
+            io.to(uid).emit('config', config)
+        }
+    });
 });
 
 server.listen(3000);
