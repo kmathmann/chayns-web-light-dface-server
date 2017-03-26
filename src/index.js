@@ -39,6 +39,14 @@ io.on('connection', function (client) {
             io.to(uid).emit('config', config)
         }
     });
+
+    client.on('reload', (uid) => {
+        const config = getConfig(uid);
+
+        if (config) {
+            io.to(uid).emit('reload');
+        }
+    });
 });
 
 server.listen(3000);
