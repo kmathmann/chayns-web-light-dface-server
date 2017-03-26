@@ -1,0 +1,19 @@
+{
+  "name": "chayns-web-light-dface",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "socket.io": "^1.7.3"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.24.0",
+    "babel-preset-env": "^1.2.2",
+    "babel-preset-stage-0": "^6.22.0"
+  },
+  "scripts": {
+    "build": "babel src -d lib"
+  },
+  "author": "Kevin Mathmann",
+  "license": "MIT"
+}
