@@ -1,29 +1,13 @@
 import http from 'http';
 import ioServer from 'socket.io';
+import { getConfig, setTappId } from './repositorys/dface-repository';
 
 const server = http.createServer();
 const io = ioServer(server);
 
-const configs = [
-    {
-        uid: 'dface01',
-        tappId: 93,
-        locationId: 98482
-    },
-    {
-        uid: 'dface02',
-        tappId: 274728,
-        locationId: 98482
-    }
-];
-
-function getConfig(uid) {
-    return configs.find(config => config.uid === uid);
-}
-
 io.on('connection', function (client) {
-    client.on('register', (uid) => {
-        const config = getConfig(uid);
+    client.on('register', async(uid) => {
+        const config = await getConfig(uid);
 
         if (config) {
             client.join(uid);
@@ -31,8 +15,10 @@ io.on('connection', function (client) {
         }
     });
 
-    client.on('changeTapp', ({ uid, tappId }) => {
-        const config = getConfig(uid);
+    client.on('changeTapp',async ({ uid, tappId }) => {
+        setTappId(uid, tappId);
+
+        const config = await getConfig(uid);
 
         if (config) {
             config.tappId = tappId;
@@ -41,11 +27,7 @@ io.on('connection', function (client) {
     });
 
     client.on('reload', (uid) => {
-        const config = getConfig(uid);
-
-        if (config) {
-            io.to(uid).emit('reload');
-        }
+        io.to(uid).emit('reload');
     });
 });
 
